@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table
 public class BookedRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
