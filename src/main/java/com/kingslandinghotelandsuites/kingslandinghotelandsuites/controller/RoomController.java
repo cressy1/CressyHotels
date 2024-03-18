@@ -1,6 +1,7 @@
 package com.kingslandinghotelandsuites.kingslandinghotelandsuites.controller;
 
 import com.kingslandinghotelandsuites.kingslandinghotelandsuites.exceptions.PhotoRetrievalException;
+import com.kingslandinghotelandsuites.kingslandinghotelandsuites.exceptions.ResourceNotFoundException;
 import com.kingslandinghotelandsuites.kingslandinghotelandsuites.model.BookedRoom;
 import com.kingslandinghotelandsuites.kingslandinghotelandsuites.model.Room;
 import com.kingslandinghotelandsuites.kingslandinghotelandsuites.response.BookingResponse;
@@ -21,6 +22,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("rooms")
@@ -80,9 +82,14 @@ public class RoomController {
         return ResponseEntity.ok(roomResponse);
 
     }
-
-
-    
+    @GetMapping("/room/{roomId}")
+    public ResponseEntity<Optional<RoomResponse>> getRoomById(@PathVariable Long roomId) {
+        Optional<Room> theRoom = roomService.getRoomById(roomId);
+        return theRoom.map(room -> {
+            RoomResponse roomResponse = getRoomResponse(room);
+            return ResponseEntity.ok(Optional.of(roomResponse));
+        }).orElseThrow(() ->new ResourceNotFoundException("Room not found"));
+    }
     
     private RoomResponse getRoomResponse(Room room) {
         
