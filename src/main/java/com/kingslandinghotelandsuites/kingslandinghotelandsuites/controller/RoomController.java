@@ -9,10 +9,12 @@ import com.kingslandinghotelandsuites.kingslandinghotelandsuites.service.Booking
 import com.kingslandinghotelandsuites.kingslandinghotelandsuites.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Blob;
@@ -58,9 +60,28 @@ public class RoomController {
             return ResponseEntity.ok(roomResponses);
     }
 
-    
-    
-    
+    @DeleteMapping("/delete/room/{roomId}")
+    public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {
+        roomService.deleteRoom(roomId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    @PutMapping("/update/{roomId}")
+    public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long roomId,
+                                                   @RequestParam(required = false) String roomType,
+                                                   @RequestParam(required = false) BigDecimal roomPrice,
+                                                   @RequestParam(required = false) MultipartFile photo) throws IOException, SQLException {
+        byte[] photoBytes =photo !=null && !photo.isEmpty()?
+                photo.getBytes() : roomService.getRoomPhotoByRoomId(roomId);
+
+        Blob photoBlob = photoBytes != null && photoBytes.length > 0 ? new SerialBlob(photoBytes) : null;
+        Room theRoom = roomService.updateRoom(roomId, roomType, roomPrice, photoBytes);
+        theRoom.setPhoto(photoBlob);
+        RoomResponse roomResponse = getRoomResponse(theRoom);
+        return ResponseEntity.ok(roomResponse);
+
+    }
+
+
     
     
     private RoomResponse getRoomResponse(Room room) {

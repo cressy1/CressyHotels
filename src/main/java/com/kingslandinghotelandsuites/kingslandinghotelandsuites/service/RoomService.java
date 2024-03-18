@@ -18,4 +18,8 @@ public interface RoomService {
     List<Room> getAllRooms();
 
     byte[] getRoomPhotoByRoomId(Long roomId) throws SQLException;
+
+    void deleteRoom(Long roomId);
+
+    Room updateRoom(Long roomId, String roomType, BigDecimal roomPrice, byte[] photoBytes);
 }
