@@ -34,7 +34,13 @@ public class BookingServiceImpl implements BookingService {
         Room room = roomService.getRoomById(roomId).get();
         List<BookedRoom> existingBookings = room.getBookings();
         boolean roomIsAvailable = roomIsAvailable(bookingRequest, existingBookings);
-        return null;
+        if (roomIsAvailable) {
+            room.addBooking(bookingRequest);
+            bookingRepository.save(bookingRequest);
+        } else{
+            throw new InvalidBookingRequestException("Sorry!!!, This room is not available for the selected date");
+        }
+        return bookingRequest.getBookingConfirmationCode();
     }
 
     private boolean roomIsAvailable(BookedRoom bookingRequest, List<BookedRoom> existingBookings) {
