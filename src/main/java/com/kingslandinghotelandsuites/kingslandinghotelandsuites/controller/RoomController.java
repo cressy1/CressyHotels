@@ -6,7 +6,7 @@ import com.kingslandinghotelandsuites.kingslandinghotelandsuites.model.BookedRoo
 import com.kingslandinghotelandsuites.kingslandinghotelandsuites.model.Room;
 import com.kingslandinghotelandsuites.kingslandinghotelandsuites.response.BookingResponse;
 import com.kingslandinghotelandsuites.kingslandinghotelandsuites.response.RoomResponse;
-import com.kingslandinghotelandsuites.kingslandinghotelandsuites.service.BookingService;
+import com.kingslandinghotelandsuites.kingslandinghotelandsuites.service.serviceImplemetation.BookingServiceImpl;
 import com.kingslandinghotelandsuites.kingslandinghotelandsuites.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -29,7 +29,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RoomController {
     private final RoomService roomService;
-    private final BookingService bookingService;
+    private final BookingServiceImpl bookingService;
     @PostMapping("/add/new-room")
     public ResponseEntity<RoomResponse> addNewRoom(@RequestParam("photo") MultipartFile photo,
                                                    @RequestParam("roomType") String roomType,
