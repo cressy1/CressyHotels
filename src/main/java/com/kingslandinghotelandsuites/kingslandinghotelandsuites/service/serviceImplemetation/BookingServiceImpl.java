@@ -1,6 +1,7 @@
 package com.kingslandinghotelandsuites.kingslandinghotelandsuites.service.serviceImplemetation;
 
 import com.kingslandinghotelandsuites.kingslandinghotelandsuites.exceptions.InvalidBookingRequestException;
+import com.kingslandinghotelandsuites.kingslandinghotelandsuites.exceptions.ResourceNotFoundException;
 import com.kingslandinghotelandsuites.kingslandinghotelandsuites.model.BookedRoom;
 import com.kingslandinghotelandsuites.kingslandinghotelandsuites.model.Room;
 import com.kingslandinghotelandsuites.kingslandinghotelandsuites.repository.BookingRepository;
@@ -63,7 +64,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookedRoom findByBookingConfirmationCode(String confirmationCode) {
-        return null;
+        return bookingRepository.findByBookingConfirmationCode(confirmationCode).orElseThrow(()->new ResourceNotFoundException("No booking found with confirmation code :" + confirmationCode));
     }
 
     @Override

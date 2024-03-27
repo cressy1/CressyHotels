@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@CrossOrigin()
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/bookings")
@@ -46,24 +46,6 @@ public class BookingController {
         }
     }
 
-    private BookingResponse getBookingResponse(BookedRoom booking) {
-        Room theRoom = roomService.getRoomById(booking.getRoom().getId()).get();
-        RoomResponse room = new RoomResponse(
-                theRoom.getId(),
-                theRoom.getRoomType(),
-                theRoom.getRoomPrice());
-        return new BookingResponse(
-                booking.getBookingId(),
-                booking.getCheckInDate(),
-                booking.getCheckOutDate(),
-                booking.getGuestFullName(),
-                booking.getGuestEmail(),
-                booking.getNumOfAdults(),
-                booking.getNumOfChildren(),
-                booking.getTotalNumOfGuest(),
-                booking.getBookingConfirmationCode(), room);
-    }
-
     @PostMapping("/room/{roomId}/booking")
     public ResponseEntity<?> SAVEBooking(@PathVariable Long roomId,
                                          @RequestBody BookedRoom bookingRequest) {
@@ -83,5 +65,24 @@ public class BookingController {
     public void cancelBooking(@PathVariable Long bookingId) {
         bookingService.cancelBooking(bookingId);
     }
+
+    private BookingResponse getBookingResponse(BookedRoom booking) {
+        Room theRoom = roomService.getRoomById(booking.getRoom().getId()).get();
+        RoomResponse room = new RoomResponse(
+                theRoom.getId(),
+                theRoom.getRoomType(),
+                theRoom.getRoomPrice());
+        return new BookingResponse(
+                booking.getBookingId(),
+                booking.getCheckInDate(),
+                booking.getCheckOutDate(),
+                booking.getGuestFullName(),
+                booking.getGuestEmail(),
+                booking.getNumOfAdults(),
+                booking.getNumOfChildren(),
+                booking.getTotalNumOfGuest(),
+                booking.getBookingConfirmationCode(), room);
+    }
+
 
 }
